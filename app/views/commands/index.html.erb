@@ -1,0 +1,67 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Commands</h1>
+
+<br>
+<h3> prix total :</h3> <h1> <%= @prixTotal %> </h1>
+
+<div class="media">
+  <div class="media-body">
+    <table class="table table-hover ">
+      <thead>
+        <tr >
+
+          <th class="text-center">adresse</th>
+          <th class="text-center">zipcode</th>
+          <th class="text-center">date</th>
+          <th class="text-center">ASAP</th>
+          <th class="text-center">prix</th>
+          <th class="text-center">unité</th>
+          <th class="text-center">commentaire</th>
+          <th class="text-center">état</th>
+          <th class="text-center">user</th>
+          <th colspan="4"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @commands.each do |command| %>
+          <tr class="text-center">
+            <td><%= command.adress %></td>
+            <td><%= command.zipcode %></td>
+            <td><%= command.dateBegin %></td>
+            <% if command.asap != nil %>
+              <td>fils</td>
+            <% else %>
+              <td> </td>
+            <% end %>
+            <td><%= command.price %></td>
+            <td><%= command.unit %></td>
+            <td><%= command.commentaire %></td>
+            <% if command.state == nil %>
+              <td>En attente</td>
+            <% end %>
+            <% if command.state == false %>
+              <td>En livraison</td>
+            <% end %>
+            <% if command.state == true %>
+              <td>Livré</td>
+            <% end %>
+            <td><%= command.user_id %></td>
+
+            <td><%= link_to 'Show', command, class:'btn btn-primary btn-sm' %></td>
+            <% if command.state == nil %>
+              <td><%= link_to 'Edit', edit_command_path(command), class:'btn btn-warning btn-sm' %></td>
+              <td><%= link_to 'Destroy', command, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-sm' %></td>
+            <% end %>
+
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<br>
+
+<%= link_to 'New Command', new_command_path %>
