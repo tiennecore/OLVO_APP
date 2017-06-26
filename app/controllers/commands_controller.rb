@@ -1,4 +1,5 @@
 class CommandsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_command, only: [:show, :edit, :update, :destroy]
 
   # GET /commands
@@ -21,7 +22,8 @@ class CommandsController < ApplicationController
 
   # GET /commands/new
   def new
-    @command = Command.new
+    @user=current_user
+    @command = current_user.commands.new
   end
 
   # GET /commands/1/edit
@@ -31,7 +33,8 @@ class CommandsController < ApplicationController
   # POST /commands
   # POST /commands.json
   def create
-    @command = Command.new(command_params)
+    @user=current_user
+    @command = @user.commands.new(command_params)
     if (@command.zipcode>75000 && @command.zipcode<75021)
       @command.price = 10
     else
