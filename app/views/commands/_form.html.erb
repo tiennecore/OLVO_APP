@@ -12,7 +12,7 @@
   <% end %>
   <div class="field">
     <%= f.label :adress %><br><br>
-    <%= f.text_field :adress, class: "form-control" %>
+    <%= f.text_field :adress , class: "form-control" %>
   </div><br>
   <div class="field">
     <%= f.label :zipcode %><br><br>
@@ -24,6 +24,13 @@
     <br>
     <%= f.date_field :dateBegin, class: "form-control" %>
   </div><br>
+  <% if current_user.admin == true %>
+    <div class="field">
+      <%= f.label :dateEnd %>
+      <br>
+      <%= f.date_field :dateEnd, class: "form-control" %>
+    </div><br>
+  <% end %>
   <div class="field">
     <%= f.label :unit %><br><br>
     <%= f.text_field :unit, class: "form-control" %>
@@ -32,6 +39,14 @@
     <%= f.label :commentaire %><br><br>
     <%= f.text_field :commentaire, class: "form-control" %>
   </div><br>
+
+  <% if current_user.admin == true %>
+    <div >
+      <p>Etat</p><br>
+      <%= f.check_box :state, value: 0 %><p> En livraison</p>
+      <%= f.check_box :state, value: 1 %><p> Livré</p> <br>
+    </div><br>
+  <% end %>
 
   <div class="actions">
     <%= f.submit %>

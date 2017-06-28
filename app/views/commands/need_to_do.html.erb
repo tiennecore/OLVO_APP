@@ -19,16 +19,12 @@
           <th class="text-center">adresse</th>
           <th class="text-center">zipcode</th>
           <th class="text-center">date</th>
-          <th class="text-center">date modifié</th>
           <th class="text-center">ASAP</th>
           <th class="text-center">prix</th>
           <th class="text-center">unité</th>
           <th class="text-center">commentaire</th>
           <th class="text-center">état</th>
-          <% if current_user.admin == true %>
-            <th class="text-center">User</th>
-          <% end %>
-
+          <th class="text-center">user</th>
           <th colspan="4"></th>
         </tr>
       </thead>
@@ -36,11 +32,10 @@
       <tbody>
         <% @commands.each do |command| %>
           <tr class="text-center">
-            <% if command.user_id == current_user.id %>
+            <% if command.user_id == current_user.id && command.state != true %>
               <td><%= command.adress %></td>
               <td><%= command.zipcode %></td>
               <td><%= command.dateBegin %></td>
-              <td><%= command.dateEnd %></td>
               <% if command.asap != nil %>
                 <td>fils</td>
               <% else %>
@@ -58,12 +53,9 @@
               <% if command.state == true %>
                 <td>Livré</td>
               <% end %>
-              <% if current_user.admin == true %>
-                <td><%= %></td>
-              <% end %>
+              <td><%= command.user_id %></td>
               <td><%= link_to 'Show', command, class:'btn btn-primary btn-sm' %></td>
-              <% if command.state == nil || current_user.admin == true %>
-
+              <% if command.state == nil %>
                 <td><%= link_to 'Edit', edit_command_path(command), class:'btn btn-warning btn-sm' %></td>
                 <td><%= link_to 'Destroy', command, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-sm' %></td>
               <% end %>

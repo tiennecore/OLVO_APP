@@ -5,10 +5,10 @@ class CommandsController < ApplicationController
   # GET /commands
   # GET /commands.json
   def index
-    @commands = Command.all
+    @commands = Command.all.order(params[:dateBegin])
     @prixTotal=0
     @commands.each do |command|
-      if command.state.nil?
+      if command.state.nil? && command.user_id == current_user.id
         @prixTotal += command.price
       end
     end
@@ -33,16 +33,22 @@ class CommandsController < ApplicationController
   # POST /commands
   # POST /commands.json
   def create
+    #@commandUser(:id)=User.find(:id)
     @user=current_user
     @command = @user.commands.new(command_params)
-    if (@command.zipcode>75000 && @command.zipcode<75021)
-      @command.price = 10
-    else
-      @command.price = 20
+    if @command.zipcode.present?
+      if (@command.zipcode > 75000) && (@command.zipcode < 75021)
+        @command.price = 10
+      else
+        @command.price = 20
+      end
     end
-    if @command.dateBegin == nil
+
+    if @command.dateBegin == nil || @command.dateBegin < DateTime.now
+      @command.dateBegin = Time.now.strftime("%d/%m/%Y")
       @command.asap = 1
     end
+
     respond_to do |format|
       if @command.save
         format.html { redirect_to @command, notice: 'Command was successfully created.' }
@@ -86,6 +92,6 @@ class CommandsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def command_params
-      params.require(:command).permit(:adress,:zipcode,:unit)
+      params.require(:command).permit(:adress,:zipcode,:unit,:dateBegin, :state, :commentaire)
     end
 end
