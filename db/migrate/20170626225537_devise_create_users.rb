@@ -2,7 +2,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
   def change
     create_table :users do |t|
       ## Database authenticatable
-      
+
       t.string :email,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
 
@@ -20,6 +20,11 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
       t.string   :current_sign_in_ip
       t.string   :last_sign_in_ip
 
+      # other variables
+      t.string :username
+      t.boolean :admin
+      t.integer :price1
+      t.integer :price2
       ## Confirmable
       # t.string   :confirmation_token
       # t.datetime :confirmed_at

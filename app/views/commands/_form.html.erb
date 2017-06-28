@@ -24,7 +24,7 @@
     <br>
     <%= f.date_field :dateBegin, class: "form-control" %>
   </div><br>
-  <% if current_user.admin == true %>
+  <% if current_user.admin? %>
     <div class="field">
       <%= f.label :dateEnd %>
       <br>
@@ -40,11 +40,11 @@
     <%= f.text_field :commentaire, class: "form-control" %>
   </div><br>
 
-  <% if current_user.admin == true %>
+  <% if current_user.admin? %>
     <div >
-      <p>Etat</p><br>
-      <%= f.check_box :state, value: 0 %><p> En livraison</p>
-      <%= f.check_box :state, value: 1 %><p> Livré</p> <br>
+      <p>Etat</p>
+      <%= f.check_box :state, value: 1 %><p> En livraison</p>
+      <%= f.check_box :state2, value: 1 %><p> Livré</p> <br>
     </div><br>
   <% end %>
 

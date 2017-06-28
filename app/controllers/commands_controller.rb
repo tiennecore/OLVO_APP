@@ -5,12 +5,21 @@ class CommandsController < ApplicationController
   # GET /commands
   # GET /commands.json
   def index
+    @commandes = []
     @commands = Command.all.order(params[:dateBegin])
     @prixTotal=0
+
     @commands.each do |command|
-      if command.state.nil? && command.user_id == current_user.id
-        @prixTotal += command.price
+      if !current_user.admin?
+        if command.user_id == current_user.id
+          @commandes.push(command)
+        end
+      else
+        @commandes.push(command)
       end
+    end
+    @commandes.each do |commande|
+      @prixTotal += commande.price
     end
 
   end
@@ -38,11 +47,12 @@ class CommandsController < ApplicationController
     @command = @user.commands.new(command_params)
     if @command.zipcode.present?
       if (@command.zipcode > 75000) && (@command.zipcode < 75021)
-        @command.price = 10
+        @command.price = current_user.price1
       else
-        @command.price = 20
+        @command.price = current_user.price2
       end
     end
+    @command.usercommand = current_user.username
 
     if @command.dateBegin == nil || @command.dateBegin < DateTime.now
       @command.dateBegin = Time.now.strftime("%d/%m/%Y")
