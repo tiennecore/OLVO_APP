@@ -12,6 +12,13 @@
 <%= link_to 'New Command', new_command_path %>
 <%= link_to'historique', commands_historique_path %>
 <%= link_to'during', commands_during_path %>
+<div class="pull-right range-query">
+  <%=form_tag commands_historique_path, :method => 'get' do%>
+      <%= date_select_tag 'search[date]', @search.dateBegin %>
+      <%= submit_tag "search",class="btn search-button" %>
+  <%end%>
+</div>
+
 <% @listDate.each do |date| %>
   <h2><%= date %> </h2>
   <div class="media">
@@ -90,6 +97,7 @@
 <p>
   Download:
   <%= link_to "CSV", commands_export_path(format: "csv") %> |
+  <%= link_to "Excel", commands_export_path(format: "xls") %>
 </p>
 
 <br>

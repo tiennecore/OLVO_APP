@@ -22,7 +22,7 @@
     <%= f.label :dateBegin %>
     <p>si pas de date format ASAP</p>
     <br>
-    <%= f.date_field :dateBegin, class: "form-control" %>
+    <%= f.date_select :dateBegin, class: "form-control" %>
   </div><br>
   <% if current_user.admin? %>
     <div class="field">
@@ -43,8 +43,8 @@
   <% if current_user.admin? %>
     <div >
       <p>Etat</p>
-      <%= f.check_box :state, value: 1 %><p> En livraison</p>
-      <%= f.check_box :state2, value: 1 %><p> Livré</p> <br>
+      <%= f.check_box :statewait %><p> En livraison</p>
+      <%= f.check_box :statedone %><p> Livré</p> <br>
     </div><br>
   <% end %>
 

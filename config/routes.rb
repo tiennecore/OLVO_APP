@@ -3,8 +3,13 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
         sessions: 'users/sessions'
       }
-  
-  resources :commands
+  get 'commands/historique'
+  get 'commands/during'
+  get 'commands/import'
+  get 'commands/export'
+  resources :commands do
+    collection { post :import }
+  end
 
   root 'commands#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
