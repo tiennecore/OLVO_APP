@@ -6,7 +6,7 @@ class Command < ApplicationRecord
   validates_length_of :zipcode, is: 5
   validates :unit, presence: true, numericality: true
 
-  
+
 
 
   def self.to_csv(options = {})
@@ -21,7 +21,7 @@ class Command < ApplicationRecord
   def self.import(file)
 
     CSV.foreach(file.path, headers: true) do |row|
-      commande = Command.create(:adress => row[0],:zipcode => row[1], :unit => row[3],:dateBegin => row[2],:commentaire => row[4])
+      commande = Command.create(:adress => row[0],:zipcode => row[1], :unit => row[4],:dateEnterFrom => row[2],:dateEnterTo => row[3],:commentaire => row[5])
       user = User.find(commande.user_id)
       commande.statewait=false
       commande.statedone=false
@@ -34,8 +34,11 @@ class Command < ApplicationRecord
       end
       commande.usercommand = user.username
 
-      if commande.dateBegin == nil || commande.dateBegin < DateTime.now
-        commande.dateBegin = Time.now.strftime("%d/%m/%Y")
+      if commande.dateEnterFrom == nil || commande.dateEnterFrom.strftime("%d/%m/%Y") < DateTime.now.strftime("%d/%m/%Y") || commande.dateEnterTo == nil || commande.dateEnterTo.strftime("%d/%m/%Y") < DateTime.now.strftime("%d/%m/%Y")
+        commande.dateFinalFrom = Time.now
+        commande.dateFinalFrom = Time.now
+        commande.dateEnterFrom = Time.now
+        commande.dateEnterTo = Time.now
         commande.asap = 1
       end
       commande.save

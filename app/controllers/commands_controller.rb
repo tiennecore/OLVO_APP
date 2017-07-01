@@ -19,24 +19,24 @@ class CommandsController < ApplicationController
       end
     else
       if !current_user.admin?
-        @commands = Command.all.where({usercommand: current_user}).order(params[:dateBegin]).reverse_order
+        @commands = Command.all.where({usercommand: current_user}).order(params[:dateFinalFrom]).reverse_order
       else
-        @commands = Command.all.order(params[:dateBegin]).reverse_order
+        @commands = Command.all.order(params[:dateFinalFrom]).reverse_order
       end
     end
     front_date(@commands)
   end
 
-# gestion des affichage par dateBegin
+# gestion des affichage par dateFinalFrom
   def front_date (list)
     @listDate = []
     if !list.empty?
-      @listDate.push(list.first.dateBegin)
-      dateBefore = list.first.dateBegin
+      @listDate.push(list.first.dateFinalFrom)
+      dateBefore = list.first.dateFinalFrom
       list.each do |commande|
-        if commande.dateBegin != dateBefore
-          dateBefore=commande.dateBegin
-          @listDate.push(commande.dateBegin)
+        if commande.dateFinalFrom.strftime("%d/%m/%Y") != dateBefore.strftime("%d/%m/%Y")
+          dateBefore=commande.dateFinalFrom
+          @listDate.push(commande.dateFinalFrom)
         end
       end
     end
@@ -47,7 +47,7 @@ class CommandsController < ApplicationController
 
     @prixTotal=0
     @commands = []
-    @tmpcommands = Command.all.order(params[:dateBegin])
+    @tmpcommands = Command.all.order(params[:dateFinalFrom])
 
 
     # gestion des affichages des commandes par trie d'admin et d'état
@@ -72,7 +72,7 @@ class CommandsController < ApplicationController
 
   def during
     commands = []
-    @commands = Command.all.order(params[:dateBegin])
+    @commands = Command.all.order(params[:dateFinalFrom])
 
     @prixTotal=0
 
@@ -93,6 +93,21 @@ class CommandsController < ApplicationController
 
   end
 
+  def export
+
+    commands = Command.all.where({dateFinalFrom: "2017-06-31"})
+    commands.each do |c|
+      if current_user.admin != true
+        commands = Command.all.where({dateFinalFrom: "2017-06-30",usercommand: current_user.username})
+      end
+    end
+    if !commands.nil?
+      respond_to do |format|
+        format.html
+        format.csv { send_data commands.to_csv }
+      end
+    end
+  end
 
 
   # GET /commands/1
@@ -112,35 +127,6 @@ class CommandsController < ApplicationController
 
   # POST /commands
   # POST /commands.json
-  def create_import
-    @user=current_user
-    @command = @user.commands.new(command_params)
-    @command.statewait=false
-    @command.statedone=false
-    if @command.zipcode.present?
-      if (@command.zipcode > 75000) && (@command.zipcode < 75021)
-        @command.price = current_user.price1
-      else
-        @command.price = current_user.price2
-      end
-    end
-    @command.usercommand = current_user.username
-
-    if @command.dateBegin == nil || @command.dateBegin < DateTime.now
-      @command.dateBegin = Time.now.strftime("%d/%m/%Y")
-      @command.asap = 1
-    end
-
-    respond_to do |format|
-      if @command.save
-        format.html { redirect_to @command, notice: 'Command was successfully created.' }
-        format.json { render :show, status: :created, location: @command }
-      else
-        format.html { render :new }
-        format.json { render json: @command.errors, status: :unprocessable_entity }
-      end
-    end
-  end
 
   def create
 
@@ -157,10 +143,21 @@ class CommandsController < ApplicationController
       end
     end
     @command.usercommand = current_user.username
-
-    if @command.dateBegin == nil || @command.dateBegin < DateTime.now
-      @command.dateBegin = Time.now.strftime("%d/%m/%Y")
+    @command.dateFinalFrom = @command.dateEnterFrom
+    @command.dateFinalTo = @command.dateEnterTo
+    if @command.dateFinalFrom == nil || @command.dateFinalFrom < DateTime.now
+      @command.dateFinalFrom = Time.now
+      @command.dateEnterFrom = Time.now
+      @command.dateFinalTo = @command.dateFinalFrom.change(hour:20)
+      @command.dateEnterTo = @command.dateEnterFrom.change(hour:20)
       @command.asap = 1
+    end
+    if @command.dateFinalFrom > @command.dateFinalTo
+      tmpdate=@command.dateFinalFrom
+      @command.dateFinalFrom = @command.dateFinalTo
+      @command.dateFinalTo = tmpdate
+      @command.dateEnterFrom = @command.dateFinalFrom
+      @command.dateEnterTo = @command.dateFinalTo
     end
 
     respond_to do |format|
@@ -177,6 +174,13 @@ class CommandsController < ApplicationController
   # PATCH/PUT /commands/1
   # PATCH/PUT /commands/1.json
   def update
+    if !@command.dateModifFrom.nil?
+        @command.dateFinalFrom = @command.dateModifFrom
+    end
+    if !@command.dateModifTo.nil?
+        @command.dateFinalTo = @command.dateModifTo
+    end
+
     respond_to do |format|
       if @command.update(command_params)
         format.html { redirect_to @command, notice: 'Command was successfully updated.' }
@@ -192,22 +196,7 @@ class CommandsController < ApplicationController
     current_user.commands.import(params[:file])
   end
 
-  def export
 
-    commands = Command.all.where({dateBegin: "2017-06-31"})
-    commands.each do |c|
-      if current_user.admin != true
-        commands = Command.all.where({dateBegin: "2017-06-30",usercommand: current_user.username})
-      end
-    end
-    if !commands.nil?
-      respond_to do |format|
-        format.html
-        format.csv { send_data commands.to_csv }
-        #format.xls # { send_data @products.to_csv(col_sep: "\t") }
-      end
-    end
-  end
   # DELETE /commands/1
   # DELETE /commands/1.json
   def destroy
@@ -224,12 +213,12 @@ class CommandsController < ApplicationController
       @command = Command.find(params[:id])
     end
     def file_params
-      params.require(:command).permit(:adress,:zipcode,:unit,:dateBegin,:commentaire)
+      params.require(:command).permit(:adress,:zipcode,:unit,:dateFinalFrom,:commentaire)
     end
     # Never trust parameters from the scary internet, only allow the white list through.
     def command_params
 
-        params.require(:command).permit(:adress,:zipcode,:unit,:dateBegin,:commentaire,:statewait,:statedone)
+        params.require(:command).permit(:adress,:zipcode,:unit,:dateEnterFrom ,:dateEnterTo ,:commentaire,:statewait,:statedone)
 
     end
 end

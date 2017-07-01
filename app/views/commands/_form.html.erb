@@ -18,19 +18,38 @@
     <%= f.label :zipcode %><br><br>
     <%= f.text_field :zipcode, class: "form-control" %>
   </div><br>
-  <div class="field">
-    <%= f.label :dateBegin %>
-    <p>si pas de date format ASAP</p>
-    <br>
-    <%= f.date_select :dateBegin, class: "form-control" %>
-  </div><br>
-  <% if current_user.admin? %>
+  <% if !current_user.admin? %>
     <div class="field">
-      <%= f.label :dateEnd %>
+      <%= f.label :dateEnterFrom %>
+      <p>si pas de date format ASAP</p>
       <br>
-      <%= f.date_field :dateEnd, class: "form-control" %>
+      <%= f.datetime_select :dateEnterFrom, class: "form-control" %>
+    </div><br>
+    <div class="field">
+      <%= f.label :dateEnterTo %>
+      <p>si pas de date format ASAP</p>
+      <br>
+      <%= f.datetime_select :dateEnterTo, class: "form-control" %>
     </div><br>
   <% end %>
+  <% if current_user.admin? %>
+    <h4> Date du client </h4>
+    <%=@command.dateEnterFrom%>
+    <%=@command.dateEnterTo%> <br>
+    <div class="field">
+      <%= f.label :dateModifFrom %>
+      <p>si pas de date format ASAP</p>
+      <br>
+      <%= f.datetime_select :dateModifFrom, class: "form-control" %>
+    </div><br>
+    <div class="field">
+      <%= f.label :dateModifTo %>
+      <p>si pas de date format ASAP</p>
+      <br>
+      <%= f.datetime_select :dateModifTo, class: "form-control" %>
+    </div><br>
+  <% end %>
+
   <div class="field">
     <%= f.label :unit %><br><br>
     <%= f.text_field :unit, class: "form-control" %>
@@ -43,8 +62,13 @@
   <% if current_user.admin? %>
     <div >
       <p>Etat</p>
-      <%= f.check_box :statewait %><p> En livraison</p>
-      <%= f.check_box :statedone %><p> Livré</p> <br>
+      <% if @command.statewait != true %>
+        <%= f.check_box :statewait %><p> En livraison</p> <br>
+      <%end%>
+
+      <% if @command.statewait == true %>
+        <%= f.check_box :statedone %><p> Livré</p> <br>
+      <%end%>
     </div><br>
   <% end %>
 

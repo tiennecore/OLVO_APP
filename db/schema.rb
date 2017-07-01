@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170629082808) do
+ActiveRecord::Schema.define(version: 20170626225537) do
 
   create_table "commands", force: :cascade do |t|
     t.string "usercommand"
@@ -18,8 +18,12 @@ ActiveRecord::Schema.define(version: 20170629082808) do
     t.integer "zipcode"
     t.float "price"
     t.integer "unit"
-    t.date "dateBegin"
-    t.date "dateEnd"
+    t.datetime "dateEnterFrom"
+    t.datetime "dateEnterTo"
+    t.datetime "dateModifFrom"
+    t.datetime "dateModifTo"
+    t.datetime "dateFinalFrom"
+    t.datetime "dateFinalTo"
     t.text "commentaire"
     t.boolean "statewait"
     t.boolean "statedone"
@@ -46,7 +50,6 @@ ActiveRecord::Schema.define(version: 20170629082808) do
     t.integer "price2"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "csv"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

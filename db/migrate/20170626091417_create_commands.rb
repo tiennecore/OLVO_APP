@@ -6,8 +6,12 @@ class CreateCommands < ActiveRecord::Migration[5.1]
       t.integer :zipcode
       t.float :price
       t.integer :unit
-      t.date :dateBegin
-      t.date :dateEnd
+      t.datetime :dateEnterFrom
+      t.datetime :dateEnterTo
+      t.datetime :dateModifFrom
+      t.datetime :dateModifTo
+      t.datetime :dateFinalFrom
+      t.datetime :dateFinalTo
       t.text :commentaire
       t.boolean :statewait
       t.boolean :statedone
