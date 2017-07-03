@@ -11,7 +11,7 @@
 <h3> prix total :</h3> <h1> <%= @prixTotal %> </h1>
 <%= link_to 'New Command', new_command_path %>
 <%= link_to'historique', commands_historique_path %>
-<%= link_to'during', commands_during_path %>
+<%= link_to'commands', commands_path %>
 <% @listDate.each do |date| %>
   <h2><%= date %> </h2>
   <div class="media">
@@ -39,6 +39,7 @@
 
         <tbody>
           <% @commands.each do |command| %>
+
             <% if  command.dateFinalFrom.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")%>
               <% if command.dateFinalFrom.strftime("%d/%m/%Y") > DateTime.now.strftime("%d/%m/%Y") %>
                 <tr class="active text-center">
@@ -50,9 +51,9 @@
                 <td><%= command.adress %></td>
                 <td><%= command.zipcode %></td>
                 <td><%= command.dateEnterFrom.strftime("%d/%m/%Y") %></td>
-                <td><%= command.dateModifFrom.strftime("%d/%m/%Y") %></td>
-                <td><%= command.dateEnterFrom.strftime("%H:%M") %></td>
-                <td><%= command.dateModifFrom.strftime("%H:%M") %></td>
+                <td><%= command.dateModifFrom.strftime("%d/%m/%Y") if command.dateModifFrom.present?%></td>
+                <td><%= command.dateFinalFrom.strftime("%H:%M") %></td>
+                <td><%= command.dateFinalTo.strftime("%H:%M") %></td>
                 <% if command.asap != nil %>
                   <td>fils</td>
                 <% else %>

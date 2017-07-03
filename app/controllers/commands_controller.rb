@@ -71,26 +71,29 @@ class CommandsController < ApplicationController
   end
 
   def during
-    commands = []
-    @commands = Command.all.order(params[:dateFinalFrom])
-
     @prixTotal=0
 
-    @commands.each do |command|
+
+    @commands = []
+    @commandes = Command.all.order(params[:dateFinalFrom])
+
+
+
+    @commandes.each do |command|
       if (command.statewait == true || command.statedone == true)
         if !current_user.admin?
           if command.user_id == current_user.id
-            commands.push(command)
+            @commands.push(command)
           end
         else
-          commands.push(command)
+          @commands.push(command)
         end
       end
     end
-    commands.each do |commande|
+    @commands.each do |commande|
       @prixTotal += commande.price * commande.unit
     end
-
+    front_date(@commands)
   end
 
   def export
@@ -171,20 +174,31 @@ class CommandsController < ApplicationController
     end
   end
 
+  def day
+
+  end
   # PATCH/PUT /commands/1
   # PATCH/PUT /commands/1.json
   def update
-    if !@command.dateModifFrom.nil?
+    if @command.dateModifFrom.present?
         @command.dateFinalFrom = @command.dateModifFrom
     end
-    if !@command.dateModifTo.nil?
+    if @command.dateModifTo.present?
         @command.dateFinalTo = @command.dateModifTo
+    end
+
+    if @command.dateFinalFrom > @command.dateFinalTo
+      tmpdate=@command.dateFinalFrom
+      @command.dateFinalFrom = @command.dateFinalTo
+      @command.dateFinalTo = tmpdate
+      @command.dateEnterFrom = @command.dateFinalFrom
+      @command.dateEnterTo = @command.dateFinalTo
     end
 
     respond_to do |format|
       if @command.update(command_params)
-        format.html { redirect_to @command, notice: 'Command was successfully updated.' }
-        format.json { render :show, status: :ok, location: @command }
+        format.html { redirect_to commands_during_url, notice: 'Command was successfully updated.' }
+
       else
         format.html { render :edit }
         format.json { render json: @command.errors, status: :unprocessable_entity }
@@ -212,13 +226,11 @@ class CommandsController < ApplicationController
     def set_command
       @command = Command.find(params[:id])
     end
-    def file_params
-      params.require(:command).permit(:adress,:zipcode,:unit,:dateFinalFrom,:commentaire)
-    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def command_params
 
-        params.require(:command).permit(:adress,:zipcode,:unit,:dateEnterFrom ,:dateEnterTo ,:commentaire,:statewait,:statedone)
+        params.require(:command).permit(:adress,:zipcode,:unit,:dateEnterFrom ,:dateEnterTo,:dateModifFrom ,:dateModifTo ,:commentaire,:statewait,:statedone)
 
     end
 end

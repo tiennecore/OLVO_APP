@@ -10,7 +10,7 @@
 <br>
 <h3> prix total :</h3> <h1> <%= @prixTotal %> </h1>
 <%= link_to 'New Command', new_command_path %>
-<%= link_to'historique', commands_historique_path %>
+<%= link_to'commands', commands_path %>
 <%= link_to'during', commands_during_path %>
 <div class="pull-right range-query">
   <%=form_tag commands_historique_path, :method => 'get' do%>

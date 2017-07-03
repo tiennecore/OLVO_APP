@@ -26,10 +26,10 @@
       <%= f.datetime_select :dateEnterFrom, class: "form-control" %>
     </div><br>
     <div class="field">
-      <%= f.label :dateEnterTo %>
-      <p>si pas de date format ASAP</p>
+
+      <p>To</p>
       <br>
-      <%= f.datetime_select :dateEnterTo, class: "form-control" %>
+      <%= f.time_select :dateEnterTo, class: "form-control" %>
     </div><br>
   <% end %>
   <% if current_user.admin? %>
@@ -37,16 +37,20 @@
     <%=@command.dateEnterFrom%>
     <%=@command.dateEnterTo%> <br>
     <div class="field">
-      <%= f.label :dateModifFrom %>
-      <p>si pas de date format ASAP</p>
+
+      <p>Date modifié </p>
       <br>
-      <%= f.datetime_select :dateModifFrom, class: "form-control" %>
+      <%= f.date_select :dateModifFrom, class: "form-control" %>
     </div><br>
     <div class="field">
-      <%= f.label :dateModifTo %>
-      <p>si pas de date format ASAP</p>
+      <p>From</p>
       <br>
-      <%= f.datetime_select :dateModifTo, class: "form-control" %>
+      <%= f.time_select :dateModifFrom, class: "form-control" %>
+    </div><br>
+    <div class="field">
+      <p>To</p>
+      <br>
+      <%= f.time_select :dateModifTo, class: "form-control" %>
     </div><br>
   <% end %>
 
