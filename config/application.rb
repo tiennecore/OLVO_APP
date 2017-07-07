@@ -1,10 +1,12 @@
 require_relative 'boot'
 
 require 'rails/all'
-
+require 'csv'
+require 'date'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+ENV['RAILS_ADMIN_THEME'] = 'rollincode'
 
 module OLVO
   class Application < Rails::Application
