@@ -5,7 +5,7 @@ class ModelMailer < ApplicationMailer
   #
   #   en.model_mailer.notif_facturation.subject
   #
-  default from: "wvetienne@gmail.com"
+  default from: "	sandboxddb07e277835439e9477d5ae571dda59.mailgun.org"
   def new_record_notification
   mail to: "wvetienne@gmail.com", subject: "Success! You did it."
 end
