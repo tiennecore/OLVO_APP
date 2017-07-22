@@ -165,6 +165,7 @@ class CommandsController < ApplicationController
 
     respond_to do |format|
       if @command.save
+        CommandNotifierMailer.send_signup_email(@user).deliver
         format.html { redirect_to @command, notice: 'Command was successfully created.' }
         format.json { render :show, status: :created, location: @command }
       else
