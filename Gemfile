@@ -35,6 +35,8 @@ gem 'bootstrap-sass', '~> 3.3.6'
 
 gem 'rails_admin', '~> 1.2'
 gem 'rails_admin_rollincode', '~> 1.0'
+gem 'therubyracer'
+gem 'less-rails'
 
 gem 'devise'
 gem 'devise-i18n'
