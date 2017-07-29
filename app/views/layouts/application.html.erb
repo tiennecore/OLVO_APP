@@ -1,35 +1,119 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>OLVO</title>
+    <title>Olvo</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
+  <style>
+.dropbtn {
+    background-color: #ff2463;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    margin-left: 0px;
+    border: none;
+    cursor: pointer;
+    border-radius: 25px 0px 0px 25px;
+}
+.head{ height:150px;}
+.picture{
+  width:20%;
+  padding-left: 5%;
+  padding-top: 2%;
+}
+
+.dropdown {
+    position: fixed;
+    display: inline-block;
+    width: auto;
+    right: 0;
+    padding-top:3%;
+}
+.titre1{
+  text-align: center;
+}
+.titre3 {
+  text-align: center;
+  font-size: 10em;
+  font-weight: bold;
+}
+.euro{
+  font-size: 5em;
+  font-weight: bold;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 25px 0px 0px 25px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown-content a:first-child{ border-radius: 25px 0px 0px 0px;}
+.dropdown-content a:last-child{border-radius: 0px 0px 0px 25px;}
+body{ background-color: #f2f2f2; }
+.dropdown-content a:hover {background-color: #f1f1f1}
+.dropdown:hover .dropdown-content { display: block; }
+.container{
+
+}
+</style>
 
   <body>
-    <% if flash[:notice] %>
-      <div class="alert alert-success">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <%= flash[:notice] %>
-      </div>
-    <% elsif flash[:error] %>
-      <div class="alert alert-error">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <%= flash[:error] %>
-      </div>
-    <% elsif flash[:alert] %>
-      <div class="alert">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <%= flash[:alert] %>
-      </div>
-    <% end %>
-    <% if user_signed_in? %>
-      <% if current_user.admin? %>
-        <%= link_to('gestion des utilisateur', rails_admin_path) %>
+    <div class="head">
+      <% if flash[:notice] %>
+        <div class="alert alert-success">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <%= flash[:notice] %>
+        </div>
+      <% elsif flash[:error] %>
+        <div class="alert alert-error">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <%= flash[:error] %>
+        </div>
+      <% elsif flash[:alert] %>
+        <div class="alert">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <%= flash[:alert] %>
+        </div>
       <% end %>
+      <% if user_signed_in? %>
+        <div class="picture">
+          <%= image_tag "logo.svg" %>
+        </div>
+
+
+          <div class="dropdown">
+            <button class="dropbtn"> <%= current_user.username %> </button>
+            <div class="dropdown-content">
+
+              <%= link_to 'Nouvelle commande', new_command_path%>
+              <%= link_to'Commandes en attente', commands_path %>
+              <%= link_to'Comande du mois', commands_during_path %>
+              <%= link_to'historique de commandes', commands_historique_path %>
+              <% if current_user.admin? %>
+                <%= link_to('gestion des utilisateur', rails_admin_path) %>
+              <% end %>
+              <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
+            </div>
+          </div>
+        </div>
+
     <% end %>
+
     <%= yield %>
   </body>
 </html>

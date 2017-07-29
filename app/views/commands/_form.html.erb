@@ -1,82 +1,93 @@
-<%= form_for(@command) do |f| %>
-  <% if command.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(command.errors.count, "error") %> prohibited this command from being saved:</h2>
+<div class="container">
+  <%= form_for(@command) do |f| %>
+    <% if command.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(command.errors.count, "error") %> prohibited this command from being saved:</h2>
 
-      <ul>
-      <% command.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+        <ul>
+        <% command.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="row">
+
+      <div class="col-sm-8 field">
+        <%= f.label :adress %><br><br>
+        <%= f.text_field :adress , class: "form-control" %>
+      </div>
+      <div class="col-sm-4 field">
+        <%= f.label :zipcode %><br><br>
+        <%= f.text_field :zipcode, class: "form-control" %>
+      </div><br>
     </div>
-  <% end %>
-  <div class="field">
-    <%= f.label :adress %><br><br>
-    <%= f.text_field :adress , class: "form-control" %>
-  </div><br>
-  <div class="field">
-    <%= f.label :zipcode %><br><br>
-    <%= f.text_field :zipcode, class: "form-control" %>
-  </div><br>
-  <% if !current_user.admin? %>
-    <div class="field">
-      <%= f.label :dateEnterFrom %>
-      <p>si pas de date format ASAP</p>
-      <br>
-      <%= f.datetime_select :dateEnterFrom, class: "form-control" %>
-    </div><br>
-    <div class="field">
+    <div class="row">
+      <% if !current_user.admin? %>
+        <div class="field">
+          <%= f.label :dateEnterFrom %>
+          <p>si pas de date format ASAP</p>
+          <br>
+          <%= f.datetime_select :dateEnterFrom, class: "form-control" %>
+        </div><br>
+        <div class="field">
 
-      <p>To</p>
-      <br>
-      <%= f.time_select :dateEnterTo, class: "form-control" %>
+          <p>To</p>
+          <br>
+          <%= f.time_select :dateEnterTo, class: "form-control" %>
+        </div><br>
+      <% end %>
+      <% if current_user.admin? %>
+        <%=@command.dateEnterFrom%>
+        <%=@command.dateEnterTo%> <br>
+        <div class="col-sm-3 input-group date">
+          <p style="font-weight: bold;">Date modifié </p>
+          <br>
+          <%= f.date_select :dateModifFrom, class: "form-control" %>
+          <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+          </div>
+        </div>
+        <div class="col-sm-2 field">
+          <p style="font-weight: bold;">From</p>
+          <br>
+          <%= f.time_select :dateModifFrom, class: "form-control" %>
+        </div>
+        <div class="col-sm-2 field">
+          <p style="font-weight: bold;">To</p>
+          <br>
+          <%= f.time_select :dateModifTo, class: "form-control" %>
+        </div>
+      <% end %>
     </div><br>
-  <% end %>
-  <% if current_user.admin? %>
-    <h4> Date du client </h4>
-    <%=@command.dateEnterFrom%>
-    <%=@command.dateEnterTo%> <br>
-    <div class="field">
+    <div class="unit">
+      <div class="field">
+        <%= f.label :unit %><br><br>
+        <%= f.text_field :unit, class: "form-control" %>
+      </div><br>
+    </div>
+    <div class="comment">
+      <div class="field">
+        <%= f.label :commentaire %><br><br>
+        <%= f.text_field :commentaire, class: "form-control" %>
+      </div><br>
 
-      <p>Date modifié </p>
-      <br>
-      <%= f.date_select :dateModifFrom, class: "form-control" %>
-    </div><br>
-    <div class="field">
-      <p>From</p>
-      <br>
-      <%= f.time_select :dateModifFrom, class: "form-control" %>
-    </div><br>
-    <div class="field">
-      <p>To</p>
-      <br>
-      <%= f.time_select :dateModifTo, class: "form-control" %>
-    </div><br>
-  <% end %>
+      <% if current_user.admin? %>
+        <div >
+          <p>Etat</p>
+          <% if @command.statewait != true %>
+            <%= f.check_box :statewait %><p> En livraison</p> <br>
+          <%end%>
 
-  <div class="field">
-    <%= f.label :unit %><br><br>
-    <%= f.text_field :unit, class: "form-control" %>
-  </div><br>
-  <div class="field">
-    <%= f.label :commentaire %><br><br>
-    <%= f.text_field :commentaire, class: "form-control" %>
-  </div><br>
+          <% if @command.statewait == true %>
+            <%= f.check_box :statedone %><p> Livré</p> <br>
+          <%end%>
+        </div><br>
+      <% end %>
 
-  <% if current_user.admin? %>
-    <div >
-      <p>Etat</p>
-      <% if @command.statewait != true %>
-        <%= f.check_box :statewait %><p> En livraison</p> <br>
-      <%end%>
-
-      <% if @command.statewait == true %>
-        <%= f.check_box :statedone %><p> Livré</p> <br>
-      <%end%>
-    </div><br>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+      <div class="actions">
+        <%= f.submit %>
+      </div>
+    <% end %>
+    </div>
+</div>
