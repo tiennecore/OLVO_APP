@@ -148,13 +148,11 @@ class CommandsController < ApplicationController
     @command.usercommand = current_user.username
     @command.dateFinalFrom = @command.dateEnterFrom
     @command.dateFinalTo = @command.dateEnterTo
-    if @command.dateFinalFrom == nil || @command.dateFinalFrom < DateTime.now
-      @command.dateFinalFrom = Time.now
-      @command.dateEnterFrom = Time.now
-      @command.dateFinalTo = @command.dateFinalFrom.change(hour:20)
-      @command.dateEnterTo = @command.dateEnterFrom.change(hour:20)
-      @command.asap = 1
+    if current_user.admin?
+      @command.dateFinalFrom = @command.dateModifFrom
+      @command.dateFinalTo = @command.dateModifTo
     end
+    
     if @command.dateFinalFrom > @command.dateFinalTo
       tmpdate=@command.dateFinalFrom
       @command.dateFinalFrom = @command.dateFinalTo

@@ -81,15 +81,11 @@
       </div>
     </div> <br>
   <% end %>
-  <br><br><br><br><br><br><br><br><br>
-  <h3>Import Commandes</h3>
-  <%= form_tag import_commands_path, multipart: true do %>
-    <%= file_field_tag :file %>
-    <%= submit_tag "Upload Commandes" %>
-  <% end %>
+  <br><br>
+
   <p>
     Download:
-    <%= link_to "CSV", commands_export_path(format: "csv") %> |
+    <%= link_to "CSV", commands_export_path(format: "csv") %>
   </p>
 
   <br>
