@@ -1,23 +1,24 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12"></div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3"></div>
+    <div class="col-xs-6">
+      <p id="notice"><%= notice %></p>
+      <%= flash[:alert]%>
+      <%=form_tag historique_path, :method => 'get' do%>
+        <p>
+          <%= date_select_tag :search, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :use_month_numbers => true, params[:search] %>
+          <%= submit_tag "Search"%>
+        </p>
 
-<h1>Commands</h1>
-<% if user_signed_in? %>
-  <li>
-  <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
-
-  </li>
-<% end %>
-
-<br>
-<h3> prix total :</h3> <h1> <%= @prixTotal %> </h1>
-<%= link_to 'New Command', new_command_path %>
-<%= link_to'commands', commands_path %>
-<%= link_to'during', commands_during_path %>
-<div class="pull-right range-query">
-  <%=form_tag commands_historique_path, :method => 'get' do%>
-      <%= date_select_tag 'search[date]', @search.dateBegin %>
-      <%= submit_tag "search",class="btn search-button" %>
-  <%end%>
+      <%end%>
+    </div>
+    <div class="col-xs-3"></div>
+  </div>
 </div>
+
 
 <% @listDate.each do |date| %>
   <h2><%= date %> </h2>
