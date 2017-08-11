@@ -100,7 +100,10 @@ body{ background-color: #f2f2f2; }
             <button class="dropbtn"> <%= current_user.username %> </button>
             <div class="dropdown-content">
 
-              <%= link_to 'Nouvelle commande', new_command_path%>
+              <% if !current_user.admin? %>
+                <%= link_to 'Nouvelle commande', new_command_path%>
+              <% end %>
+
               <%= link_to'Commandes en attente', commands_path %>
               <%= link_to'Comande du mois', commands_during_path %>
               <%= link_to'historique de commandes', commands_historique_path %>

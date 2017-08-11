@@ -1,6 +1,6 @@
 <div class="container">
   <div class="titre">
-    <h1 class="titre1">Commandes Livré ou en livraison</h1>
+    <h1 class="titre1">Commandes en attente</h1>
 
 
     <br>
@@ -14,17 +14,17 @@
         <table class="table table-hover ">
           <thead>
             <tr>
-              <th class="text-center">adresse</th>
-              <th class="text-center">zipcode</th>
-              <th class="text-center">date</th>
-              <th class="text-center">date modifié</th>
+              <th class="text-center">Adresse</th>
+              <th class="text-center">Zipcode</th>
+              <th class="text-center">Date</th>
+              <th class="text-center">Date modifié</th>
               <th class="text-center">From</th>
               <th class="text-center">To</th>
-              <th class="text-center">ASAP</th>
-              <th class="text-center">prix</th>
-              <th class="text-center">unité</th>
-              <th class="text-center">commentaire</th>
-              <th class="text-center">état</th>
+              <th class="text-center">Format</th>
+              <th class="text-center">Prix</th>
+              <th class="text-center">Unité</th>
+              <th class="text-center">Commentaire</th>
+              <th class="text-center">État</th>
               <% if current_user.admin == true %>
                 <th class="text-center">User</th>
               <% end %>
@@ -34,22 +34,22 @@
 
           <tbody>
             <% @commands.each do |command| %>
-              <% if  command.dateFinalFrom.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")%>
-                <% if command.dateFinalFrom.strftime("%d/%m/%Y") > DateTime.now.strftime("%d/%m/%Y") %>
+              <% if  command.dateFinal.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")%>
+                <% if command.dateFinal.strftime("%d/%m/%Y") > DateTime.now.strftime("%d/%m/%Y") %>
                   <tr class="active text-center">
-                <% elsif command.dateFinalFrom.strftime("%d/%m/%Y") == DateTime.now.strftime("%d/%m/%Y") %>
+                <% elsif command.dateFinal.strftime("%d/%m/%Y") == DateTime.now.strftime("%d/%m/%Y") %>
                   <tr class="warning text-center ">
                 <% else %>
                   <tr class="danger text-center ">
                 <% end %>
                   <td><%= command.adress %></td>
                   <td><%= command.zipcode %></td>
-                  <td><%= command.dateEnterFrom.strftime("%d/%m/%Y") %></td>
-                  <td><%= command.dateModifFrom.strftime("%d/%m/%Y") if command.dateModifFrom.present?%></td>
-                  <td><%= command.dateFinalFrom.strftime("%Hh%M")   %></td>
-                  <td><%= command.dateFinalTo.strftime("%Hh%M")  %></td>
+                  <td><%= command.dateFinal.strftime("%d/%m/%Y") %></td>
+                  <td><%= command.dateModif.strftime("%d/%m/%Y") if command.timeModifFrom.present?%></td>
+                  <td><%= command.timeFinalFrom.strftime("%Hh%M")   %></td>
+                  <td><%= command.timeFinalTo.strftime("%Hh%M")  %></td>
                   <% if command.asap != nil %>
-                    <td>fils</td>
+                    <td>ASAP</td>
                   <% else %>
                     <td> </td>
                   <% end %>
@@ -68,7 +68,6 @@
                   <% if current_user.admin == true %>
                     <td><%= command.usercommand%></td>
                   <% end %>
-                  <td><%= link_to 'Show', command, class:'btn btn-primary btn-sm' %></td>
                   <% if (command.statewait != true && command.statedone != true) || current_user.admin == true %>
                     <td><%= link_to 'Edit', edit_command_path(command), class:'btn btn-warning btn-sm' %></td>
                     <td><%= link_to 'Destroy', command, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-sm' %></td>

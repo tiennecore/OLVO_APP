@@ -24,36 +24,45 @@
     </div>
     <div class="row">
       <% if !current_user.admin? %>
-        <div class="field">
-          <%= f.label :dateEnterFrom %>
+
+        <div class="col-sm-3 field">
+          <%= f.label :dateEnter %>
           <p>si pas de date format ASAP</p>
           <br>
-          <%= f.date_select :dateEnterFrom, class: "form-control" %>
+          <%= f.date_select :dateEnter, class: "form-control" %>
+
+
         </div><br>
-        <div class="field">
+        <div class="col-sm-3 field">
+          <p>From</p>
+          <br>
+          <%= f.time_select :timeEnterFrom, class: "form-control" %>
+
+        </div><br>
+        <div class="col-sm-2 field">
 
           <p>To</p>
           <br>
-          <%= f.time_select :dateEnterTo, class: "form-control" %>
+          <%= f.time_select :timeEnterTo, class: "form-control" %>
+
         </div><br>
       <% end %>
-      <% if current_user.admin? %>
-        <%=@command.dateEnterFrom%>
-        <%=@command.dateEnterTo%> <br>
+      <% if current_user.admin? %> <br>
         <div class="col-sm-3 datetime_field">
+          <%= @command.dateFinal.strftime("%d/%m/%Y") %> <%= @command.timeFinalFrom.strftime("%Hh%M") %> <%= @command.timeFinalTo.strftime("%Hh%M") %>
           <p style="font-weight: bold;">Date modifié </p>
           <br>
-          <%= f.date_select :dateModifFrom, class: "form-control" %>
-        </div>
+          <%= f.date_select :dateModif, class: "form-control" %>
+        </div><br>
         <div class="col-sm-2 field">
           <p style="font-weight: bold;">From</p>
           <br>
-          <%= f.time_select :dateModifFrom, class: "form-control" %>
+          <%= f.time_select :timeModifFrom, class: "form-control" %>
         </div>
         <div class="col-sm-3 field">
           <p style="font-weight: bold;">To</p>
           <br>
-          <%= f.time_select :dateModifTo, class: "form-control" %>
+          <%= f.time_select :timeModifTo, class: "form-control" %>
         </div>
         <% end %>
         <div class="col-sm-2 field">
@@ -91,9 +100,15 @@
     <div class="row">
       <div class="col-sm-5">
       </div>
+      <% if !current_user.admin? %>
       <div class="col-sm-7 action">
         <%= f.submit "nouvelle commande",class: "btn btn-large btn-primary"%>
       </div>
+      <%else%>
+        <div class="col-sm-7 action">
+          <%= f.submit "Modification de commande",class: "btn btn-large btn-primary"%>
+        </div>
+      <% end %>
     </div>
   <% end %>
   <h3 class="titre1">Importer des commandes par fichier csv</h3>
